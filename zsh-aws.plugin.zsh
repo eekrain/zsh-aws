@@ -8,7 +8,7 @@ if [[ $PMSPEC != *b* ]] {
   PATH=$PATH:"${0:h}/bin"
 }
 
-
+_INPUT=
 function alp() {
   [[ -r "${AWS_CONFIG_FILE:-$HOME/.aws/config}" ]] || return 1
   grep --color=never -Eo '\[.*\]' "${AWS_CONFIG_FILE:-$HOME/.aws/config}" | sed -E 's/^[[:space:]]*\[(profile)?[[:space:]]*([-_[:alnum:]\.@]+)\][[:space:]]*$/\2/g'
@@ -155,25 +155,52 @@ function acak() {
 }
 
 function aso() {
-  PROFILES=$(alp)
+  if command -v aws_completer &> /dev/null; then
+    PROFILES=$(alp)
 
-  # unset AWS_DEFAULT_PROFILE AWS_PROFILE AWS_EB_PROFILE
-  _listProfiles $PROFILES
-  _validateInput "Select profile by number:"
+    # unset AWS_DEFAULT_PROFILE AWS_PROFILE AWS_EB_PROFILE
+    _listProfiles $PROFILES
+    _validateInput "Select profile by number:"
 
-  SELECTED=$(head -$_INPUT < <(_alp) | tail -1 | awk '{$1=$1};1')
-
-  asp $SELECTED
+    SELECTED=$(head -$_INPUT < <(echo "${PROFILES}"))
+    # echo "SELECTED: ${SELECTED}"
+    # echo "_INPUT: ${_INPUT}"
+    asp $SELECTED
+    aws sso login
+    asp
+  else
+    echo "Configure SSO only can be implemented on aws-cli v2"
+  fi
 }
 
-_listProfiles(){
+function _listProfiles(){
   profiles=$1
-  ii=1
+  k=1
   while read line
   do
-    echo "${n}. ${line}";
-    ii=$((ii + 1));
+    echo "${k}. ${line}";
+    k=$((k + 1));
   done < <(echo "${profiles}" | tail -n 10)
+}
+
+_validateInput() {
+    while true; do
+        
+        # Read user input
+        printf $1
+        read tmp
+
+        # If input is not an integer or if input is out of range, throw an error
+        # Ask for input again
+        if [[ ! $tmp =~ ^[0-9]+$ ]]; then
+            echo "$fg[red]Invalid input$reset_color"
+        elif [[ "$tmp" -lt "1" ]] || [[ "$tmp" -gt $((k - 1)) ]]; then
+            echo "$fg[red]Input out of range $reset_color"
+        else
+            _INPUT=$tmp
+            break
+        fi
+    done
 }
 
 function _aws_profiles() {
@@ -235,4 +262,3 @@ else
   [[ -r $_aws_zsh_completer_path ]] && source $_aws_zsh_completer_path
   unset _aws_zsh_completer_path _brew_prefix
 fi
-
