@@ -167,11 +167,11 @@ function aso() {
 }
 
 _listProfiles(){
-  n=1
+  ii=1
   while read line
   do
     echo "${n}. ${line}";
-    n=$((n + 1));
+    ii=$((ii + 1));
   done < <(echo "${PROFILES}" | tail -n 10)
 }
 
