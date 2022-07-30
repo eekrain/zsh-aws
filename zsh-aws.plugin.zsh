@@ -154,6 +154,27 @@ function acak() {
   AWS_PAGER="" aws iam list-access-keys
 }
 
+function aso() {
+  PROFILES=($(alp))
+
+  # unset AWS_DEFAULT_PROFILE AWS_PROFILE AWS_EB_PROFILE
+  _listProfiles
+  _validateInput "Select profile by number:"
+
+  SELECTED=$(head -$_INPUT < <(_alp) | tail -1 | awk '{$1=$1};1')
+
+  asp $SELECTED
+}
+
+_listProfiles(){
+  n=1
+  while read line
+  do
+    echo "${n}. ${line}";
+    n=$((n + 1));
+  done < <(echo "${PROFILES}" | tail -n 10)
+}
+
 function _aws_profiles() {
   reply=($(alp))
 }
