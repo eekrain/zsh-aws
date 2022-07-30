@@ -155,10 +155,10 @@ function acak() {
 }
 
 function aso() {
-  PROFILES=($(alp))
+  PROFILES=$(alp)
 
   # unset AWS_DEFAULT_PROFILE AWS_PROFILE AWS_EB_PROFILE
-  _listProfiles
+  _listProfiles $PROFILES
   _validateInput "Select profile by number:"
 
   SELECTED=$(head -$_INPUT < <(_alp) | tail -1 | awk '{$1=$1};1')
@@ -167,12 +167,13 @@ function aso() {
 }
 
 _listProfiles(){
+  profiles=$1
   ii=1
   while read line
   do
     echo "${n}. ${line}";
     ii=$((ii + 1));
-  done < <(echo "${PROFILES}" | tail -n 10)
+  done < <(echo "${profiles}" | tail -n 10)
 }
 
 function _aws_profiles() {
