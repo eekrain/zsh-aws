@@ -162,9 +162,9 @@ function aso() {
     _listProfiles $PROFILES
     _validateInput "Select profile by number:"
     
-    SELECTED=$(head -$_INPUT < <(echo "${PROFILES}"))
-    # echo "SELECTED: ${SELECTED}"
-    # echo "_INPUT: ${_INPUT}"
+    SELECTED=$((echo "${PROFILES}") | sed -n '${_INPUT}p')
+    echo "SELECTED: ${SELECTED}"
+    echo "_INPUT: ${_INPUT}"
     asp $SELECTED
     aws sso login
     # asp
@@ -194,7 +194,7 @@ _validateInput() {
     # Ask for input again
     if [[ ! $tmp =~ ^[0-9]+$ ]]; then
       echo "$fg[red]Invalid input$reset_color"
-      elif [[ "$tmp" -lt "1" ]] || [[ "$tmp" -gt $((k - 1)) ]]; then
+      elif [[ "$tmp" -lt "1" ]] || [[ "$tmp" -gt $((k)) ]]; then
       echo "$fg[red]Input out of range $reset_color"
     else
       _INPUT=$tmp
