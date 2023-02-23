@@ -190,12 +190,14 @@ _validateInput() {
     printf $1
     read tmp
     
+    echo "${k}"
+    
     # If input is not an integer or if input is out of range, throw an error
     # Ask for input again
     if [[ ! $tmp =~ ^[0-9]+$ ]]; then
       echo "$fg[red]Invalid input$reset_color"
-      # elif [[ "$tmp" -lt "1" ]] || [[ "$tmp" -gt $((k)) ]]; then
-      # echo "$fg[red]Input out of range $reset_color"
+      elif [[ "$tmp" -lt "1" ]] || [[ "$tmp" -gt $((k)) ]]; then
+      echo "$fg[red]Input out of range $reset_color"
     else
       _INPUT=$tmp
       break
