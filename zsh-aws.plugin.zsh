@@ -166,7 +166,7 @@ function aso() {
     echo "SELECTED: ${SELECTED}"
     echo "_INPUT: ${_INPUT}"
     asp $SELECTED
-    aws sso login --profile $SELECTED
+    aws sso login --profile ${SELECTED}
   else
     echo "Configure SSO only can be implemented on aws-cli v2"
   fi
