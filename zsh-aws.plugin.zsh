@@ -162,7 +162,7 @@ function aso() {
     _listProfiles $PROFILES
     _validateInput "Select profile by number:"
     
-    SELECTED=$((echo $PROFILES | head -$_INPUT)
+    SELECTED=$((echo "${PROFILES}" | head -$_INPUT)
     echo "SELECTED: ${SELECTED}"
     echo "_INPUT: ${_INPUT}"
     asp $SELECTED
