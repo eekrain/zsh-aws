@@ -163,8 +163,8 @@ function aso() {
     _validateInput "Select profile by number:"
     
     SELECTED=$(echo "${PROFILES}" | head -$_INPUT)
-    echo "SELECTED: ${SELECTED}"
-    echo "_INPUT: ${_INPUT}"
+    # echo "SELECTED: ${SELECTED}"
+    # echo "_INPUT: ${_INPUT}"
     asp $SELECTED
     aws sso login --profile $SELECTED
   else
